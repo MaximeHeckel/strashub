@@ -14,18 +14,24 @@ var yelpTokenSecret = 'MZjfKU_lsbqGtMl3npX8rXKDqhs'/*yelpConfig.oauthTokenSecret
 var yelpApiUrl = 'http://api.yelp.com';
 var yelpSuffix = '/v2/search/';
 
-var yelpSearchParams = {
+var yelpSearchParamsRestaurants = {
   term: 'restaurants',
   location: 'Strasbourg'
 }
 
-var yelpOauth = new Oauth(yelpApiUrl,yelpApiUrl,yelpConsumerKey,yelpConsumerSecret,'1.0', null, 'HMAC-SHA1');
+var yelpSearchParamsBars = {
+  term: 'bars',
+  location: 'Strasbourg'
+}
 
-var yelpFinalUrl = yelpApiUrl + yelpSuffix + '?' + querystring.stringify(yelpSearchParams)
+var yelpOauth = new OAuth(yelpApiUrl,yelpApiUrl,yelpConsumerKey,yelpConsumerSecret,'1.0', null, 'HMAC-SHA1');
+
+var yelpFinalUrlRestaurants = yelpApiUrl + yelpSuffix + '?' + querystring.stringify(yelpSearchParamsRestaurants);
+var yelpFinalUrlBars = yelpApiUrl + yelpSuffix + '?' + querystring.stringify(yelpSearchParamsBars);
 var yelpResponse = "not yet";
 
-exports.strasYelpRequest = function(callback){
-  yelpOauth.get(yelpFinalUrl, yelpToken, yelpTokenSecret,function(err, data, result){
+exports.strasYelpRequestRestaurants = function(callback){
+  yelpOauth.get(yelpFinalUrlRestaurants, yelpToken, yelpTokenSecret,function(err, data, result){
     var apiResponse, yelpResponse;
     if(err || result.statusCode !== 200){
       console.log("Yelp API error: " + err);
@@ -34,6 +40,22 @@ exports.strasYelpRequest = function(callback){
     } else {
       console.log("Success !");
       yelpResponse = data;
+      callback(null, yelpResponse)
+    }
+  });
+};
+
+exports.strasYelpRequestBars = function(callback){
+  yelpOauth.get(yelpFinalUrlBars, yelpToken, yelpTokenSecret,function(err, data, result){
+    var apiResponse, yelpResponse;
+    if(err || result.statusCode !== 200){
+      console.log("Yelp API error: " + err);
+      yelpResponse = err;
+      callback(err)
+    } else {
+      console.log("Success !");
+      yelpResponse = data;
+      console.log(data)
       callback(null, yelpResponse)
     }
   });
