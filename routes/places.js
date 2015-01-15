@@ -13,7 +13,11 @@ router.get('/tourism', function(req, res) {
 });
 
 router.get('/restaurants', function(req,res){
-  res.send('yelp stuff goes here');
+  yelpHandler.strasYelpRequest(function(err, result){
+    if(err) console.log(err);
+    result = JSON.parse(result)
+    res.send(result)
+  })
 });
 
 module.exports = router;
