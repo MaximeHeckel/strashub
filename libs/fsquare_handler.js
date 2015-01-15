@@ -1,12 +1,12 @@
 var fs = require('fs'),
     request = require('request'),
-       querystring = require('querystring'),
-       OAuth = require('oauth').OAuth,
-       OAuth2 = require('oauth').OAuth2;
+    querystring = require('querystring'),
+    OAuth = require('oauth').OAuth,
+    OAuth2 = require('oauth').OAuth2;
 
 //FOURSQUARE URL API VARIABLES
 
-//var fsquareConfig = JSON.parse(fs.readFileSync('./config/config.js'))
+//PUT EVERYTHING IN ENV
 var fsquareApiUrl = 'https://api.foursquare.com/v2'
 var fsquareUrl = 'http://foursquare.com/'
 var fsquareSuffix = '/venues/explore'

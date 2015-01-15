@@ -1,12 +1,11 @@
 var fs = require('fs'),
-    request = require('request'),
     querystring = require('querystring'),
     OAuth = require('oauth').OAuth,
     OAuth2 = require('oauth').OAuth2;
 
 //YELP URL API VARIABLES
 
-//var yelpConfig = JSON.parse(fs.readFileSync('yelp_api.json','utf8'));
+//PUT EVERYTHING IN ENV
 var yelpConsumerKey = 'RQwf9tSgqKZd5K4Sg8-Q6w' /*yelpConfig.oauthConsumerKey;*/
 var yelpConsumerSecret = '9OW0sUIym3xvjbO6mH042ag2RaM'/*yelpConfig.oauthConsumerSecret*/
 var yelpToken = 'ABuk4FPygarvSpWaOs6F_QJ4XdOl0UNJ'/*yelpConfig.oauthToken*/
