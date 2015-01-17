@@ -1,4 +1,6 @@
 var fs = require('fs'),
+    mongoose = require('mongoose'),
+    Places = require('../models/places.js'),
     request = require('request'),
     querystring = require('querystring'),
     OAuth = require('oauth').OAuth,
@@ -33,9 +35,34 @@ exports.strasRequest = function(callback){
       fsquareResponse = err;
       callback(err)
     } else {
-      console.log("Success !");
-      //console.log(data);
       fsquareResponse = data;
+      fsquareResponse = JSON.parse(fsquareResponse);
+      Places.count(function(err,count){
+        if(count == 0){
+          var fq = fsquareResponse.response.groups[0];
+          for(var i = 0; i<fq.items.length; i++){
+            Places.create({
+              id: fq.items[i].venue.id,
+              name: fq.items[i].venue.name,
+              la: fq.items[i].venue.location.lat,
+              lg: fq.items[i].venue.location.lng,
+              rating: fq.items[i].venue.rating
+            }, function(err, Places){
+              if(err) console.log(err)
+            });
+          }
+        } else {
+          Places.update({
+            id: fq.items[i].venue.id,
+            name: fq.items[i].venue.name,
+            la: fq.items[i].venue.location.lat,
+            lg: fq.items[i].venue.location.lng,
+            rating: fq.items[i].venue.rating,
+          }, function(err, Places){
+            if(err) console.log(err)
+          });
+        }
+      })
       callback(null,fsquareResponse)
     }
   });
