@@ -6,7 +6,8 @@ var schema = new mongoose.Schema({
   la: Number,
   lg: Number,
   rating: {type: Number, default: 0},
-  text: {type: String, default: ""}
+  text: {type: String, default: ""},
+  photo: {type: String, default: ""}
 });
 
 module.exports = mongoose.model('Place', schema);

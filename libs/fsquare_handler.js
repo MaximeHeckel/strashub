@@ -26,7 +26,17 @@ var fsquareAuth = {
 var fsquareFinalUrl = fsquareApiUrl + fsquareSuffix +'?' + querystring.stringify(fsquareSearchParams) + '&' + querystring.stringify(fsquareAuth)
 var fsquareResponse = "not yet"
 
-console.log(fsquareFinalUrl);
+strasRequestPics = function(id, callback){
+  var testUrl = fsquareApiUrl + "/venues/" + id +'?'+querystring.stringify(fsquareAuth) + '&v=20150117';
+  request(testUrl, function(err, res, data){
+    if(err){
+      callback(err)
+    } else {
+      data = JSON.parse(data);
+      callback(null,data);
+    }
+  })
+}
 
 exports.strasRequest = function(callback){
   request(fsquareFinalUrl, function(err, res, data){
@@ -40,7 +50,7 @@ exports.strasRequest = function(callback){
       Places.count(function(err,count){
         if(count == 0){
           var fq = fsquareResponse.response.groups[0];
-          for(var i = 0; i<fq.items.length; i++){
+          for(var i = 0; i<fq.items.length-1; i++){
             Places.create({
               id: fq.items[i].venue.id,
               name: fq.items[i].venue.name,
@@ -48,19 +58,27 @@ exports.strasRequest = function(callback){
               lg: fq.items[i].venue.location.lng,
               rating: fq.items[i].venue.rating
             }, function(err, Places){
-              if(err) console.log(err)
+                if(err) console.log(err)
+                strasRequestPics(fq.items[i].venue.id, function(err,result){
+                  var uri = result.response.venue.photos.groups[0].items[0]
+                  Places.update({
+                    photo: uri.prefix+uri.width+'x'+uri.height+uri.suffix
+                  })
+              })
             });
           }
         } else {
-          Places.update({
-            id: fq.items[i].venue.id,
-            name: fq.items[i].venue.name,
-            la: fq.items[i].venue.location.lat,
-            lg: fq.items[i].venue.location.lng,
-            rating: fq.items[i].venue.rating,
-          }, function(err, Places){
-            if(err) console.log(err)
-          });
+            var fq = fsquareResponse.response.groups[0];
+            for(var i = 0; i<fq.items.length; i++){
+              strasRequestPics(fq.items[i].venue.id, function(err,result){
+                var uri = result.response.venue.photos.groups[0].items[0]
+                Places.update({
+                  photo: uri.prefix+uri.width+'x'+uri.height+uri.suffix
+                })
+              },function(err,Places){
+                if(err) console.log(err)
+              })
+          }
         }
       })
       callback(null,fsquareResponse)
