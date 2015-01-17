@@ -18,18 +18,10 @@ var yelpHandler = require('./libs/yelp_handler.js');
 
 cusHandler.strasVelhop(function(err,res){
   if(err) console.log(err);
-  //console.log(res)
 })
 
 foursquareHandler.strasRequest(function(err,res){
   if(err) console.log(err);
-  for(var i =0; i<res.response.groups[0].items.length; i++){
-    //if(res.response.groups[0].itmes[i].tips != undefined){
-      //console.log(res.response.groups[0].items[4])
-      //console.log(res.response.groups[0].items[i].tips);
-    //}
-  }
-
 })
 
 var app = express();
