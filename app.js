@@ -22,7 +22,6 @@ cusHandler.strasVelhop(function(err,res){
 
 foursquareHandler.strasRequestPlaces(function(err,res){
   if(err) console.log(err);
-  //console.log(res.response.groups[0].items[4].venue.photos.groups)
 })
 
 var app = express();

@@ -1,0 +1,79 @@
+var fs = require('fs'),
+mongoose = require('mongoose'),
+Places = require('../models/places.js'),
+request = require('request'),
+querystring = require('querystring'),
+OAuth = require('oauth').OAuth,
+OAuth2 = require('oauth').OAuth2;
+
+//FOURSQUARE URL API VARIABLES
+
+//PUT EVERYTHING IN ENV
+var fsquareApiUrl = 'https://api.foursquare.com/v2'
+var fsquareUrl = 'http://foursquare.com/'
+var fsquareSuffix = '/venues/explore'
+var fsquareSearchParams = {
+  near : "Strasbourg",
+  section : "outdoors",
+  intent : "browse",
+  radius : "4000",
+  v : "20140801" //DON'T CHANGE
+}
+var fsquareAuth = {
+  client_id : 'LLO0IEM00UATGQ31N1GNZHL5F5EGPVR3WQYCHH2BAMGGIOSN' ,
+  client_secret : '0PHQLSSNCTCXLKU2LV0LITR5UG4W5UILT1DBRVXXYPHNGH5X'
+}
+var fsquareFinalUrl = fsquareApiUrl + fsquareSuffix +'?' + querystring.stringify(fsquareSearchParams) + '&' + querystring.stringify(fsquareAuth)
+var fsquareResponse = "not yet"
+
+strasRequestData = function(ident){
+  var Url = fsquareApiUrl + "/venues/" + ident +'?'+querystring.stringify(fsquareAuth) + '&v=20150117';
+  request(Url, function(err, res, data){
+    if(err){
+      console.log(err)
+    } else {
+      data = JSON.parse(data)
+      var fq = data.response.venue;
+      var uri = fq.photos.groups[0].items[0];
+      Places.create({
+        id: fq.id,
+        name: fq.name,
+        la: fq.location.lat,
+        lg: fq.location.lng,
+        photo: uri.prefix+uri.width+'x'+uri.height+uri.suffix
+      })
+    }
+  })
+}
+
+exports.strasRequestPlaces = function(callback){
+  request(fsquareFinalUrl, function(err, res, data){
+    if(err){
+      console.log("Foursquare API error: " + err);
+      callback(err)
+    } else {
+      fsquareResponse = data;
+      fsquareResponse = JSON.parse(fsquareResponse);
+      Places.count(function(err,count){
+        if(count == 0){
+          var fq = fsquareResponse.response.groups[0];
+          for(var i = 0; i<fq.items.length; i++){
+            strasRequestData(fq.items[i].venue.id)
+          }
+        } else {
+          var fq = fsquareResponse.response.groups[0];
+          for(var i = 0; i<fq.items.length; i++){
+            Places.update({
+              la: fq.items[i].venue.location.lat,
+              lg: fq.items[i].venue.location.lng,
+              rating: fq.items[i].venue.rating
+            },function(err, Places){
+              if(err) console.log(err)
+              })
+            }
+          }
+        })
+        callback(null,fsquareResponse)
+      }
+    });
+  }
