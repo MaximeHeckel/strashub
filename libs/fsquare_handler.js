@@ -1,6 +1,7 @@
 var fs = require('fs'),
     mongoose = require('mongoose'),
     Places = require('../models/places.js'),
+    Photos = require('../models/photos.js'),
     request = require('request'),
     querystring = require('querystring'),
     OAuth = require('oauth').OAuth,
@@ -26,23 +27,30 @@ var fsquareAuth = {
 var fsquareFinalUrl = fsquareApiUrl + fsquareSuffix +'?' + querystring.stringify(fsquareSearchParams) + '&' + querystring.stringify(fsquareAuth)
 var fsquareResponse = "not yet"
 
-strasRequestPics = function(id, callback){
-  var testUrl = fsquareApiUrl + "/venues/" + id +'?'+querystring.stringify(fsquareAuth) + '&v=20150117';
-  request(testUrl, function(err, res, data){
+strasRequestData = function(ident){
+  var Url = fsquareApiUrl + "/venues/" + ident +'?'+querystring.stringify(fsquareAuth) + '&v=20150117';
+  request(Url, function(err, res, data){
     if(err){
-      callback(err)
+      console.log(err)
     } else {
-      data = JSON.parse(data);
-      callback(null,data);
+      data = JSON.parse(data)
+      var fq = data.response.venue;
+      var uri = fq.photos.groups[0].items[0];
+      Places.create({
+        id: fq.id,
+        name: fq.name,
+        la: fq.location.lat,
+        lg: fq.location.lng,
+        photo: uri.prefix+uri.width+'x'+uri.height+uri.suffix
+      })
     }
   })
 }
 
-exports.strasRequest = function(callback){
+exports.strasRequestPlaces = function(callback){
   request(fsquareFinalUrl, function(err, res, data){
     if(err){
       console.log("Foursquare API error: " + err);
-      fsquareResponse = err;
       callback(err)
     } else {
       fsquareResponse = data;
@@ -50,37 +58,22 @@ exports.strasRequest = function(callback){
       Places.count(function(err,count){
         if(count == 0){
           var fq = fsquareResponse.response.groups[0];
-          for(var i = 0; i<fq.items.length-1; i++){
-            Places.create({
-              id: fq.items[i].venue.id,
-              name: fq.items[i].venue.name,
-              la: fq.items[i].venue.location.lat,
-              lg: fq.items[i].venue.location.lng,
-              rating: fq.items[i].venue.rating
-            }, function(err, Places){
-                if(err) console.log(err)
-                strasRequestPics(fq.items[i].venue.id, function(err,result){
-                  var uri = result.response.venue.photos.groups[0].items[0]
-                  Places.update({
-                    photo: uri.prefix+uri.width+'x'+uri.height+uri.suffix
-                  })
-              })
-            });
+          for(var i = 0; i<fq.items.length; i++){
+            strasRequestData(fq.items[i].venue.id)
           }
         } else {
             var fq = fsquareResponse.response.groups[0];
             for(var i = 0; i<fq.items.length; i++){
-              strasRequestPics(fq.items[i].venue.id, function(err,result){
-                var uri = result.response.venue.photos.groups[0].items[0]
-                Places.update({
-                  photo: uri.prefix+uri.width+'x'+uri.height+uri.suffix
-                })
-              },function(err,Places){
+              Places.update({
+                la: fq.items[i].venue.location.lat,
+                lg: fq.items[i].venue.location.lng,
+                rating: fq.items[i].venue.rating
+              },function(err, Places){
                 if(err) console.log(err)
               })
+            }
           }
-        }
-      })
+        })
       callback(null,fsquareResponse)
     }
   });

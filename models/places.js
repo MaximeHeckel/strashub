@@ -5,8 +5,7 @@ var schema = new mongoose.Schema({
   name: String,
   la: Number,
   lg: Number,
-  rating: {type: Number, default: 0},
-  text: {type: String, default: ""},
+  rating: {type: String, default: "0"},
   photo: {type: String, default: ""}
 });
 

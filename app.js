@@ -20,8 +20,8 @@ cusHandler.strasVelhop(function(err,res){
   if(err) console.log(err);
 })
 
-foursquareHandler.strasRequest(function(err,res){
-  //if(err) console.log(err);
+foursquareHandler.strasRequestPlaces(function(err,res){
+  if(err) console.log(err);
   //console.log(res.response.groups[0].items[4].venue.photos.groups)
 })
 
