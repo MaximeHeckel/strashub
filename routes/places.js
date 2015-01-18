@@ -1,47 +1,38 @@
 var express = require('express');
-var fsquareHandler = require('../libs/fsquare_handler.js');
-var yelpHandler = require('../libs/yelp_handler.js');
-var cusHandler = require('../libs/cus_handler.js');
+var mongoose = require('mongoose');
+var Tourism = require('../models/tourism.js');
+var Places = require('../models/places.js');
+var Velhop = require('../models/velhop.js');
 var router = express.Router();
 
 /* GET places listing. */
 router.get('/tourism', function(req, res) {
- fsquareHandler.strasRequest(function(err,result){
-   if(err) console.log(err);
-   result = JSON.parse(result)
-   res.send(result)
+ Tourism.find({}, function(err,data){
+   if(err) res.send(err)
+   res.send(data)
  })
 });
 
-router.get('/restaurants', function(req,res){
-  yelpHandler.strasYelpRequestRestaurants(function(err, result){
-    if(err) console.log(err);
-    result = JSON.parse(result)
-    res.send(result)
+router.get('/food', function(req,res){
+  Places.find({}, function(err,data){
+    if(err) res.send(err)
+    res.send(data)
   })
 });
 
-router.get('/bars', function(req,res){
-  yelpHandler.strasYelpRequestBars(function(err, result){
-    if(err) console.log(err);
-    result = JSON.parse(result)
-    res.send(result)
-  })
-});
 
-router.get('/stopslist', function(req,res){
+/*router.get('/stopslist', function(req,res){
   cusHandler.strasTramStops(function(err, result){
     if(err) console.log(err);
     result = JSON.parse(result);
     res.send(result)
   })
-});
+});*/
 
 router.get('/velhop', function(req,res){
-  cusHandler.strasVelhop(function(err, result){
-    if(err) console.log(err);
-    result = JSON.parse(result);
-    res.send(result)
+  Velhop.find({}, function(err, data){
+    if(err) res.send(err)
+    res.send(data)
   })
 });
 

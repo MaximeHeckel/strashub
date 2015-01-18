@@ -54,7 +54,6 @@ exports.strasRequestPlaces = function(callback){
     } else {
       fsquareResponse = data;
       fsquareResponse = JSON.parse(fsquareResponse);
-      console.log(fsquareResponse.response.groups[0].items);
       Tourism.count(function(err,count){
         if(count == 0){
           var fq = fsquareResponse.response.groups[0];
