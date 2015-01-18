@@ -8,10 +8,10 @@ var fs = require('fs'),
 //YELP URL API VARIABLES
 
 //PUT EVERYTHING IN ENV
-var yelpConsumerKey = 'RQwf9tSgqKZd5K4Sg8-Q6w' /*yelpConfig.oauthConsumerKey;*/
-var yelpConsumerSecret = '9OW0sUIym3xvjbO6mH042ag2RaM'/*yelpConfig.oauthConsumerSecret*/
-var yelpToken = 'ABuk4FPygarvSpWaOs6F_QJ4XdOl0UNJ'/*yelpConfig.oauthToken*/
-var yelpTokenSecret = 'MZjfKU_lsbqGtMl3npX8rXKDqhs'/*yelpConfig.oauthTokenSecret*/
+var yelpConsumerKey = process.env.YELPCONSUMERKEY /*yelpConfig.oauthConsumerKey;*/
+var yelpConsumerSecret = process.env.YELPCONSUMERSECRET/*yelpConfig.oauthConsumerSecret*/
+var yelpToken = process.env.YELPTOKEN/*yelpConfig.oauthToken*/
+var yelpTokenSecret = process.env.YELPTOKENSECRET/*yelpConfig.oauthTokenSecret*/
 var yelpApiUrl = 'http://api.yelp.com';
 var yelpSuffix = '/v2/search/';
 

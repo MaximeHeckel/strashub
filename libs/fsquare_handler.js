@@ -20,8 +20,8 @@ var fsquareSearchParams = {
   v : "20140801" //DON'T CHANGE
 }
 var fsquareAuth = {
-  client_id : 'LLO0IEM00UATGQ31N1GNZHL5F5EGPVR3WQYCHH2BAMGGIOSN' ,
-  client_secret : '0PHQLSSNCTCXLKU2LV0LITR5UG4W5UILT1DBRVXXYPHNGH5X'
+  client_id : process.env.FSQUARECLIENTID ,
+  client_secret : process.env.FSQUARECLIENTSECRET
 }
 var fsquareFinalUrl = fsquareApiUrl + fsquareSuffix +'?' + querystring.stringify(fsquareSearchParams) + '&' + querystring.stringify(fsquareAuth)
 var fsquareResponse = "not yet"

@@ -10,7 +10,7 @@ var db = require('./config/config.js');
 var routes = require('./routes/index');
 var places = require('./routes/places');
 
-mongoose.connect(db.url);
+mongoose.connect(process.env.MONGO);
 
 var cusHandler = require('./libs/cus_handler.js');
 var foursquareHandler = require('./libs/fsquare_handler.js');
