@@ -22,6 +22,11 @@ cusHandler.strasVelhop(function(err,res){
 
 foursquareHandler.strasRequestPlaces(function(err,res){
   if(err) console.log(err);
+
+})
+
+yelpHandler.strasYelpRequest(function(err,res){
+  if(err) console.log(err);
 })
 
 var app = express();

@@ -10,4 +10,4 @@ var schema = new mongoose.Schema({
   photo: {type: String, default: ""}
 });
 
-module.exports = mongoose.model('Place', schema);
+module.exports = mongoose.model('Tourism', schema);

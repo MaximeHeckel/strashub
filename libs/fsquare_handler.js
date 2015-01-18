@@ -1,6 +1,6 @@
 var fs = require('fs'),
 mongoose = require('mongoose'),
-Places = require('../models/places.js'),
+Tourism = require('../models/tourism.js'),
 request = require('request'),
 querystring = require('querystring'),
 OAuth = require('oauth').OAuth,
@@ -14,9 +14,9 @@ var fsquareUrl = 'http://foursquare.com/'
 var fsquareSuffix = '/venues/explore'
 var fsquareSearchParams = {
   near : "Strasbourg",
-  section : "outdoors",
+  section : "sights",
   intent : "browse",
-  radius : "4000",
+  radius : "1000",
   v : "20140801" //DON'T CHANGE
 }
 var fsquareAuth = {
@@ -35,7 +35,7 @@ strasRequestData = function(ident){
       data = JSON.parse(data)
       var fq = data.response.venue;
       var uri = fq.photos.groups[0].items[0];
-      Places.create({
+      Tourism.create({
         id: fq.id,
         name: fq.name,
         la: fq.location.lat,
@@ -54,24 +54,14 @@ exports.strasRequestPlaces = function(callback){
     } else {
       fsquareResponse = data;
       fsquareResponse = JSON.parse(fsquareResponse);
-      Places.count(function(err,count){
+      console.log(fsquareResponse.response.groups[0].items);
+      Tourism.count(function(err,count){
         if(count == 0){
           var fq = fsquareResponse.response.groups[0];
           for(var i = 0; i<fq.items.length; i++){
             strasRequestData(fq.items[i].venue.id)
           }
-        } else {
-          var fq = fsquareResponse.response.groups[0];
-          for(var i = 0; i<fq.items.length; i++){
-            Places.update({
-              la: fq.items[i].venue.location.lat,
-              lg: fq.items[i].venue.location.lng,
-              rating: fq.items[i].venue.rating
-            },function(err, Places){
-              if(err) console.log(err)
-              })
-            }
-          }
+        }
         })
         callback(null,fsquareResponse)
       }
