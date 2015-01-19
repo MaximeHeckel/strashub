@@ -6,4 +6,8 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Strashub' });
 });
 
+router.get('*', function(req,res){
+  res.render('index', {title: 'Strashub'});
+});
+
 module.exports = router;

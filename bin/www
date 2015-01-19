@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 var debug = require('debug')('expressapp');
 var app = require('../app');
-
+//Setting app port as ENV variable if available of 3000 by default
 app.set('port', process.env.PORT || 3000);
 
+//Launching the server
 var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });

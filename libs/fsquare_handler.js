@@ -7,11 +7,11 @@ OAuth = require('oauth').OAuth,
 OAuth2 = require('oauth').OAuth2;
 
 //FOURSQUARE URL API VARIABLES
-
-//PUT EVERYTHING IN ENV
 var fsquareApiUrl = 'https://api.foursquare.com/v2'
 var fsquareUrl = 'http://foursquare.com/'
 var fsquareSuffix = '/venues/explore'
+
+//Search parameters for the foursquare API
 var fsquareSearchParams = {
   near : "Strasbourg",
   section : "sights",
@@ -19,6 +19,8 @@ var fsquareSearchParams = {
   radius : "1000",
   v : "20140801" //DON'T CHANGE
 }
+
+//Authentication keys are set in ENV
 var fsquareAuth = {
   client_id : process.env.FSQUARECLIENTID ,
   client_secret : process.env.FSQUARECLIENTSECRET
@@ -26,6 +28,7 @@ var fsquareAuth = {
 var fsquareFinalUrl = fsquareApiUrl + fsquareSuffix +'?' + querystring.stringify(fsquareSearchParams) + '&' + querystring.stringify(fsquareAuth)
 var fsquareResponse = "not yet"
 
+//This function request data from the foursquare api by ID
 strasRequestData = function(ident){
   var Url = fsquareApiUrl + "/venues/" + ident +'?'+querystring.stringify(fsquareAuth) + '&v=20150117';
   request(Url, function(err, res, data){
@@ -46,6 +49,8 @@ strasRequestData = function(ident){
   })
 }
 
+//This function request data from the foursquare api using the
+//fsquareFinalUrl, i.e. with the API's explore method 
 exports.strasRequestPlaces = function(callback){
   request(fsquareFinalUrl, function(err, res, data){
     if(err){

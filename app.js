@@ -6,12 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var db = require('./config/config.js');
+//Loading local route files
 var routes = require('./routes/index');
 var places = require('./routes/places');
 
+//Connecting to the mongoDB database
 mongoose.connect(process.env.MONGO);
 
+//Loading handlers
 var cusHandler = require('./libs/cus_handler.js');
 var foursquareHandler = require('./libs/fsquare_handler.js');
 var yelpHandler = require('./libs/yelp_handler.js');
@@ -29,6 +31,8 @@ yelpHandler.strasYelpRequest(function(err,res){
   if(err) console.log(err);
 })
 
+
+//Setting up the Express App
 var app = express();
 
 // view engine setup
@@ -80,5 +84,5 @@ app.use(function(err, req, res, next) {
     });
 });
 
-
+//Exporting the app variable to the global scope
 module.exports = app;

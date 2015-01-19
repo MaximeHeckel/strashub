@@ -1,11 +1,16 @@
 var express = require('express');
 var mongoose = require('mongoose');
+//Loading local models files
 var Tourism = require('../models/tourism.js');
 var Places = require('../models/places.js');
 var Velhop = require('../models/velhop.js');
 var router = express.Router();
 
-/* GET places listing. */
+
+router.get('*', function(req,res){
+  res.render('index', {title: 'Strashub'});
+});
+/* GET sightseeing places listing. */
 router.get('/tourism', function(req, res) {
  Tourism.find({}, function(err,data){
    if(err) res.send(err)
@@ -13,6 +18,7 @@ router.get('/tourism', function(req, res) {
  })
 });
 
+/* GET restaurants and bars listing. */
 router.get('/food', function(req,res){
   Places.find({}, function(err,data){
     if(err) res.send(err)
@@ -29,6 +35,7 @@ router.get('/food', function(req,res){
   })
 });*/
 
+/* GET velhop places and availability listing. */
 router.get('/velhop', function(req,res){
   Velhop.find({}, function(err, data){
     if(err) res.send(err)
@@ -36,4 +43,5 @@ router.get('/velhop', function(req,res){
   })
 });
 
+//Exporting the router variable to the global scope
 module.exports = router;
