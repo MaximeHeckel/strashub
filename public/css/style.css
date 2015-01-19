@@ -24,6 +24,12 @@ body {
     left: 15%;
 }
 
+.contact{
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+}
+
 h1{
   font-size: 55px;
   font-weight: 100;
