@@ -7,7 +7,7 @@ This project aims to provide a complete API for the city of Strasbourg including
 
 ##API Endpoints
 
-This first version includes 3 endpoints. The main url to access the data is [https://strashub.scalingo.io/](https://strashub.scalingo.io/)
+This first version includes 3 endpoints to access the data. The main url to access the data is [https://strashub.scalingo.io/](https://strashub.scalingo.io/)
 
 
 ####Sights
