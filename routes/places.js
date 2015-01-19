@@ -6,10 +6,6 @@ var Places = require('../models/places.js');
 var Velhop = require('../models/velhop.js');
 var router = express.Router();
 
-
-router.get('*', function(req,res){
-  res.render('index', {title: 'Strashub'});
-});
 /* GET sightseeing places listing. */
 router.get('/tourism', function(req, res) {
  Tourism.find({}, function(err,data){
