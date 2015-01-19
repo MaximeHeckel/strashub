@@ -8,6 +8,14 @@ var router = express.Router();
 
 /* GET sightseeing places listing. */
 router.get('/tourism', function(req, res) {
+  res.set({
+    // nice to have, but Chrome dont seem to mind either way
+    'Access-Control-Allow-Origin': '*',
+    // right content type prevent warnings and errors
+    'Content-Type': 'text/javascript; charset=UTF-8',
+    // optional, this is in seconds, equivalent to 8h
+    'Cache-Control': 'public, max-age=28800'
+  });
  Tourism.find({}, function(err,data){
    if(err) res.send(err)
    res.send(data)
