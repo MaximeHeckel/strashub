@@ -30,6 +30,10 @@ body {
   left: 50%;
 }
 
+.contact p{
+  font-size: 15px;
+}
+
 h1{
   font-size: 55px;
   font-weight: 100;
