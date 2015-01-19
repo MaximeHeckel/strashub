@@ -18,7 +18,7 @@ router.get('/tourism', function(req, res) {
   });
  Tourism.find({}, function(err,data){
    if(err) res.send(err)
-   res.json(data)
+   res.json(JSON.stringify(data));
  })
 });
 
