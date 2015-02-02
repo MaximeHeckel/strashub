@@ -11,7 +11,7 @@ var routes = require('./routes/index');
 var places = require('./routes/places');
 
 //Connecting to the mongoDB database
-mongoose.connect(process.env.MONGO);
+mongoose.connect("mongodb://max:quicksellio@ds039441.mongolab.com:39441/quicksell");
 
 //Loading handlers
 var cusHandler = require('./libs/cus_handler.js');
